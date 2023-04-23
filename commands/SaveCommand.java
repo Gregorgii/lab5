@@ -1,5 +1,8 @@
 package commands;
 
+import managers.CollectionManager;
+import managers.FileManager;
+
 public class SaveCommand implements Command {
     private final FileManager fileManager;
     private final CollectionManager collectionManager;

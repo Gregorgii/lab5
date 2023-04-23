@@ -1,6 +1,8 @@
 package commands;
 
 import managers.CollectionManager;
+import managers.IoManager;
+import managers.StudyGroupParser;
 
 public class UpdateCommand extends AbstractCommand {
     private final CollectionManager collectionManager;

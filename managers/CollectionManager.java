@@ -1,21 +1,22 @@
 package managers;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 import things.*;
 
 public class CollectionManager {
-    private ArrayList<StudyGroup> groupCollection = new ArrayList<StudyGroup>();
-    private FileManager fileManager;
+    private final ArrayList<StudyGroup> groupCollection;
 
-    public CollectionManager(FileManager fileManager) throws IOException {
+    public CollectionManager(Path filePath) throws IOException {
 
-        this.fileManager = fileManager;
-        
+        groupCollection = new ArrayList<>();
         loadCollection();
     }
     /**
-     * @return The collecton itself.
+     * @return The collection itself.
      */
     public ArrayList<StudyGroup> getCollection(){
         return groupCollection;
@@ -41,16 +42,33 @@ public class CollectionManager {
      */
     public StudyGroup getLast() {
         if (groupCollection.isEmpty()) return null;
-        return groupCollection.get(groupCollection.size());
+        return groupCollection.get(groupCollection.size()-1);
+    }
+
+    /**
+     * Get element with min. value
+     * @return dragon object with min. value
+     */
+    public StudyGroup getMin(){
+        if(groupCollection.size() > 0) return Collections.min(groupCollection);
+        return null;
+    }
+
+    /**
+     * Get collection size
+     * @return number of elements stored in collection
+     */
+    public int getSize(){
+        return groupCollection.size();
     }
 
     /**
      * @param id ID of the group.
      * @return A group by his ID or null if group isn't found.
      */
-    public StudyGroup getById(Long id) {
+    public StudyGroup getById(Integer id) {
         for (StudyGroup studyGroup: groupCollection) {
-            if (studyGroup.getId().equals(id)) return studyGroup;
+            if (Objects.equals(studyGroup.getId(), id)) return studyGroup;
         }
         return null;
     }
@@ -68,7 +86,7 @@ public class CollectionManager {
      * @param group A group to remove.
      */
     public void removeByID(Integer id) {
-        groupCollection.removeIf(groupCollection -> groupCollection.getId() == id);
+        groupCollection.removeIf(groupCollection -> Objects.equals(groupCollection.getId(), id));
     }
 
     /**
@@ -100,7 +118,9 @@ public class CollectionManager {
      * @throws IOException
      */
     public void saveCollection() throws IOException {
-            fileManager.writeCollection(groupCollection, null);
+        String filename = IoManager.inputString(IoManager.inputString());
+
+        fileManager.writeCollection(groupCollection, fileName);
     }
 
     /**
@@ -115,12 +135,12 @@ public class CollectionManager {
     public String toString() {
         if (groupCollection.isEmpty()) return "Коллекция пуста!";
 
-        String info = "";
+        StringBuilder info = new StringBuilder();
         for (StudyGroup studyGroup : groupCollection) {
-            info += studyGroup;
-            if (studyGroup != groupCollection.get(groupCollection.size())) info += "\n\n";
+            info.append(studyGroup);
+            if (studyGroup != groupCollection.get(groupCollection.size()-1)) info.append("\n\n");
         }
-        return info;
+        return info.toString();
     }
     public Object infoAboutCollection() {
         return null;

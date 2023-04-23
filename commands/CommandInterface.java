@@ -6,7 +6,7 @@ package commands;
 
 
 public interface CommandInterface {
-    String getDescription();
-    String getName();
-    boolean execute(String argument);
+    public String getDescription();
+    public String getName();
+    public void execute(String[] args);
 }

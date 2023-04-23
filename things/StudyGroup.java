@@ -1,12 +1,13 @@
 package things;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 /**
 * The hugest class that include all info about students and calls Study group
 */
 
-public class StudyGroup {
+public class StudyGroup implements Comparator<StudyGroup> {
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -106,9 +107,13 @@ public class StudyGroup {
     }
 
 
-    public int compareTo(StudyGroup groupObj) {
-        return id.compareTo(groupObj.getId());
+
+    @Override
+    public int compare(StudyGroup o1, StudyGroup o2) {
+        return 0;
     }
 
+    public boolean compareTo(StudyGroup groupToCompare) {
 
+    }
 }

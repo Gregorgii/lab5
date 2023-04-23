@@ -1,61 +1,117 @@
 package managers;
 
-import com.opencsv.CSVReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
 
+import com.opencsv.CSVReader;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import things.StudyGroup;
 
+import javax.naming.NoPermissionException;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.stream.Stream;
+
 /**
- * Operates the file for saving/loading collection.
+ * Class for work with collection.
  */
 public class FileManager {
+
+    private final Path defaultPath;
+    private final ArrayList<StudyGroup> groupCollection;
+    private final LocalDate creationDate;
+
+
     /**
-     * Constructor for FileManager.
-     * @param envVariable Environment variable for file path.
+     * Constructor. Creates abject to work with collection.
      */
-    public FileManager(String envVariable) {
+    public FileManager(Path filePath){
+        defaultPath = filePath;
+        groupCollection = new ArrayList<>();
+        this.creationDate = LocalDate.now();
     }
 
     /**
-     * Writes collection to a file.
-     * @param collection Collection to write.
-     * @param fileName Name of the file to write to.
-     * @throws IOException If an I/O error occurs.
+     * Returns s default file path specified in class.
+     * @return path
      */
-    public void writeCollection(Collection<?> collection, String fileName) throws IOException {
-        OutputStream outputStream = new FileOutputStream(fileName);
-        PrintWriter printWriter = new PrintWriter(outputStream);
+    public Path getPath(){
+        return defaultPath;
+    }
 
-        // Write XML header and opening tag for collection
-        printWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        printWriter.println("<collection>");
+    /**
+     * Adds object to collection
+     * @param dragon object to add
+     */
+    public void add(StudyGroup group){
+        groupCollection.add(group);
+    }
 
-        // Write each element of the collection as a separate XML element
-        for (Object element : collection) {
-            printWriter.print("  <element>");
-            printWriter.print(element.toString());
-            printWriter.println("</element>");
+    /**
+     * Removes all elements from collection
+     */
+    public void clearCollection() {
+        this.groupCollection.clear();
+    }
+
+    /**
+     * Removes object from collection with specified id.
+     * @param id id of object to be removed from collection.
+     * @return true if object was removed successfully, false if object with spec. id does now exist.
+     */
+    public boolean removeById(long id){
+        for(int index = 0; index < groupCollection.size(); index++){
+            if(groupCollection.get(index).getId() == id){
+                this.removeByIndex(index);
+                return true;
+            }
         }
-
-        // Write closing tag for collection
-        printWriter.println("</collection>");
-
-        // Close the PrintWriter and OutputStream
-        printWriter.close();
-        outputStream.close();
+        return false;
     }
 
+    /**
+     * Removes element with specified index
+     * @param index object to be removed index
+     * @throws IndexOutOfBoundsException when elements with such index does not exist
+     */
+    public void removeByIndex(int index) throws IndexOutOfBoundsException{
+        groupCollection.remove(index);
+    }
+
+    /**
+     * Get info about collection
+     * @return string with info about collection
+     */
+    public String getInfo(){
+        String result = "";
+        result += "Information about collection:\n";
+        result += "Created at " + this.creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + '\n';
+        result += "Collection type is " + this.groupCollection.getClass().getName() + '\n';
+        result += "Amount of items stored in - " + this.groupCollection.size() + '\n';
+
+        return result;
+    }
+
+
+    /**
+     * Fill collection from file from default file path
+     */
+    public void fillCollectionFromFile(){
+        fillCollectionFromFile(defaultPath);
+    }
+
+    /**
+     * Fill collection from file
+     * @param path path to .csv file to load from
+     */
     public void fillCollectionFromFile(Path path){
 
         // check if file exist
@@ -77,14 +133,14 @@ public class FileManager {
             return;
         }
 
-        try (InputStream inputStream = new InputStream(Files.newInputStream(path))){
+        try (BufferedInputStream inputStream = new BufferedInputStream(Files.newInputStream(path))){
 
             CSVReader reader = new CSVReader(new InputStreamReader(inputStream));
-            CsvToBean<Dragon> csv = new CsvToBeanBuilder<Dragon>(reader).withType(Dragon.class).build();
+            CsvToBean<StudyGroup> csv = new CsvToBeanBuilder<StudyGroup>(reader).withType(StudyGroup.class).build();
 
-            dragons.addAll(csv.parse());
+            groupCollection.addAll(csv.parse());
 
-            System.out.println(dragons.size() + " item(s) loaded from file " + path);
+            System.out.println(groupCollection.size() + " item(s) loaded from file " + path);
         }
         catch (RuntimeException e){
             System.out.println(e.getMessage());}
@@ -93,10 +149,5 @@ public class FileManager {
         }
     }
 
-        // Close the Scanner and InputStream
-        scanner.close();
-        inputStream.close();
 
-        return collection;
-    }
 }

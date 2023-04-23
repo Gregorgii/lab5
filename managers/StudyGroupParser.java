@@ -17,13 +17,13 @@ public class StudyGroupParser {
     }
 
     public StudyGroup parseStudyGroup() {
-        Integer id = ioManager.inputInt("Введите ID группы:");
-        String name = ioManager.inputString("Введите название группы:");
+        Integer id = IoManager.inputInt("Введите ID группы:");
+        String name = IoManager.inputString("Введите название группы:");
         Coordinates coordinates = parseCoordinates();
         LocalDate creationDate = LocalDate.now();
         long studentsCount = ioManager.inputLong("Введите количество студентов:");
-        Integer shouldBeExpelled  = ioManager.inputInt("Введите количество отчисляемых:");
-        Integer transferredStudents = ioManager.inputInt("Введите количество переведенных:");
+        Integer shouldBeExpelled  = IoManager.inputInt("Введите количество отчисляемых:");
+        Integer transferredStudents = IoManager.inputInt("Введите количество переведенных:");
         Semester semesterEnum = parseSemesterEnum();
         Person groupAdmin = parsePerson();
         
@@ -40,7 +40,7 @@ public class StudyGroupParser {
         String semesterEnum = null;
         while(semesterEnum == null ){
             try{
-                semesterEnum = ioManager.inputString("Введите номер семестра:");
+                semesterEnum = IoManager.inputString("Введите номер семестра:");
             } catch (Exception e) {
                 System.out.println("Попробуйте ввести на английском языке капсом:");
             }
@@ -48,11 +48,11 @@ public class StudyGroupParser {
         return Semester.valueOf(semesterEnum);
     }
 
-    private LocalDate parseDate(String message) {
+    private LocalDate parseDate() {
         LocalDate date = null;
         while (date == null) {
             try {
-                date = LocalDate.parse(ioManager.inputString(message));
+                date = LocalDate.parse(IoManager.inputString("Введите дату в формате yyyy-MM-dd:"));
             } catch (Exception e) {
                 System.out.println("Неверный формат даты. Попробуйте еще раз.");
             }
@@ -61,10 +61,10 @@ public class StudyGroupParser {
     }
 
     private Person parsePerson() {
-        String name = ioManager.inputString("Введите имя:");
-        LocalDate birthday = parseDate("Введите дату в формате yyyy-MM-dd:");
+        String name = IoManager.inputString("Введите имя:");
+        LocalDate birthday = parseDate();
         long weight = ioManager.inputLong("Введите вес:");        
-        String passportID = ioManager.inputString("Введите номер паспорта:");
+        String passportID = IoManager.inputString("Введите номер паспорта:");
         return new Person(name, birthday, weight, passportID);
     }
 

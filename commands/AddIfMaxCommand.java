@@ -1,6 +1,10 @@
 package commands;
 
-public class AddIfMaxCommand implements Command {
+import managers.CollectionManager;
+import managers.StudyGroupParser;
+import things.StudyGroup;
+
+public class AddIfMaxCommand implements CommandInterface {
     private final CollectionManager collectionManager;
     private final StudyGroupParser studyGroupParser;
 
@@ -10,7 +14,17 @@ public class AddIfMaxCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public String getDescription() {
+        return "add element if max";
+    }
+
+    @Override
+    public String getName() {
+        return "add if max";
+    }
+
+    @Override
+    public void execute(String[] args) {
         StudyGroup studyGroup = studyGroupParser.parseStudyGroup();
         if (collectionManager.isMax(studyGroup)) {
             collectionManager.addToCollection(studyGroup);
@@ -18,6 +32,19 @@ public class AddIfMaxCommand implements Command {
         } else {
             System.out.println("Значение элемента меньше максимального.");
         }
+
     }
+
+    if(collectionManager.getSize() == 0) this.collectionManager.add(dragon);
+        else if (dragon.compareTo(collectionManager.getMin()) < 0){
+        this.collectionManager.add(dragon);
+        System.out.println("Element added");
+    }
+        else {
+        System.out.println("Element not added. It is greater than min of collection");
+    }
+
+}
+
 }
 

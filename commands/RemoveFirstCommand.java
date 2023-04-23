@@ -1,6 +1,8 @@
 package commands;
 
 
+import managers.CollectionManager;
+
 public class RemoveFirstCommand implements Command {
     private final CollectionManager collectionManager;
 

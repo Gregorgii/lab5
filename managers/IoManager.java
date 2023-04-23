@@ -3,7 +3,7 @@ package managers;
 import java.util.Scanner;
 
 public class IoManager {
-    public int inputInt(String message) {
+    public static int inputInt(String message) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print(message + " ");
             while (!scanner.hasNextInt()) {
@@ -14,7 +14,7 @@ public class IoManager {
         }
     }
 
-    public String inputString(String message) {
+    public static String inputString(String message) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print(message + " ");
             return scanner.nextLine();
