@@ -25,26 +25,15 @@ public class AddIfMaxCommand implements CommandInterface {
 
     @Override
     public void execute(String[] args) {
-        StudyGroup studyGroup = studyGroupParser.parseStudyGroup();
-        if (collectionManager.isMax(studyGroup)) {
-            collectionManager.addToCollection(studyGroup);
+        StudyGroup groupToCompare = studyGroupParser.parseStudyGroup();
+        if (collectionManager.isMax(groupToCompare)) {
+            collectionManager.addToCollection(groupToCompare);
             System.out.println("Элемент добавлен.");
         } else {
             System.out.println("Значение элемента меньше максимального.");
         }
 
     }
-
-    if(collectionManager.getSize() == 0) this.collectionManager.add(dragon);
-        else if (dragon.compareTo(collectionManager.getMin()) < 0){
-        this.collectionManager.add(dragon);
-        System.out.println("Element added");
-    }
-        else {
-        System.out.println("Element not added. It is greater than min of collection");
-    }
-
 }
 
-}
 

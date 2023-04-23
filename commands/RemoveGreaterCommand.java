@@ -1,6 +1,12 @@
 package commands;
 
-public class RemoveGreaterCommand implements Command {
+import managers.CollectionManager;
+import managers.StudyGroupParser;
+import things.StudyGroup;
+
+import java.io.IOException;
+
+public class RemoveGreaterCommand implements CommandInterface {
     private final CollectionManager collectionManager;
     private final StudyGroupParser studyGroupParser;
 
@@ -10,9 +16,20 @@ public class RemoveGreaterCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(String[] args) throws IOException {
         StudyGroup studyGroup = studyGroupParser.parseStudyGroup();
         collectionManager.removeGreater(studyGroup);
         System.out.println("Элементы удалены.");
     }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
 }

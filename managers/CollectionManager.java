@@ -4,14 +4,15 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
-
 import things.*;
 
 public class CollectionManager {
     private final ArrayList<StudyGroup> groupCollection;
+    private final Path defaultPath;
 
     public CollectionManager(Path filePath) throws IOException {
 
+        defaultPath = filePath;
         groupCollection = new ArrayList<>();
         loadCollection();
     }
@@ -20,6 +21,14 @@ public class CollectionManager {
      */
     public ArrayList<StudyGroup> getCollection(){
         return groupCollection;
+    }
+
+    /**
+     * Returns s default file path specified in class.
+     * @return path
+     */
+    public Path getPath(){
+        return defaultPath;
     }
 
     /**
@@ -75,7 +84,7 @@ public class CollectionManager {
 
     /**
      * Adds a new group to collection.
-     * @param group A group to add.
+     * @param studyGroup A group to add.
      */
     public void addToCollection(StudyGroup studyGroup) {
         groupCollection.add(studyGroup);
@@ -83,7 +92,7 @@ public class CollectionManager {
 
     /**
      * Removes a group from collection.
-     * @param group A group to remove.
+     * @param id A group to remove.
      */
     public void removeByID(Integer id) {
         groupCollection.removeIf(groupCollection -> Objects.equals(groupCollection.getId(), id));
@@ -93,8 +102,19 @@ public class CollectionManager {
      * Remove group greater than the selected one.
      * @param groupToCompare A group to compare with.
      */
-    public void removeGreater(StudyGroup groupToCompare) {
-        groupCollection.removeIf(groupCollection -> groupCollection.compareTo(groupToCompare) > 0);
+    public void removeGreater(StudyGroup groupToCompare) throws IOException {
+
+
+        StudyGroup studyGroup = new StudyGroupParser(new IoManager()).parseStudyGroup();
+        int counter = 0;
+
+        for (StudyGroup group : groupCollection){
+            if(group.compareTo(groupToCompare)) {
+                removeByID(group.getId());
+                counter += 1;
+            }
+        }
+        System.out.println(counter + " elements was removed");
     }
 
     /**
@@ -118,9 +138,8 @@ public class CollectionManager {
      * @throws IOException
      */
     public void saveCollection() throws IOException {
-        String filename = IoManager.inputString(IoManager.inputString());
-
-        fileManager.writeCollection(groupCollection, fileName);
+        Object fileName = IoManager.inputString(IoManager.inputString("write name of file"));
+        writeCollection(groupCollection, fileName);
     }
 
     /**
@@ -144,6 +163,9 @@ public class CollectionManager {
     }
     public Object infoAboutCollection() {
         return null;
+    }
+
+    public boolean isMax(StudyGroup studyGroup) {
     }
 }
 

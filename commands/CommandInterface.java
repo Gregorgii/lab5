@@ -1,5 +1,7 @@
 package commands;
 
+import java.io.IOException;
+
 /**
  * Base interface for commands
  */
@@ -8,5 +10,5 @@ package commands;
 public interface CommandInterface {
     public String getDescription();
     public String getName();
-    public void execute(String[] args);
+    public void execute(String[] args) throws IOException;
 }

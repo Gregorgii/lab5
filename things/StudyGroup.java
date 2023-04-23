@@ -7,7 +7,7 @@ import java.util.Comparator;
 * The hugest class that include all info about students and calls Study group
 */
 
-public class StudyGroup implements Comparator<StudyGroup> {
+public class StudyGroup implements Comparable<StudyGroup> {
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null

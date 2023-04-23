@@ -16,12 +16,13 @@ public class StudyGroupParser {
         this.ioManager = ioManager;
     }
 
+
     public StudyGroup parseStudyGroup() {
         Integer id = IoManager.inputInt("Введите ID группы:");
         String name = IoManager.inputString("Введите название группы:");
         Coordinates coordinates = parseCoordinates();
         LocalDate creationDate = LocalDate.now();
-        long studentsCount = ioManager.inputLong("Введите количество студентов:");
+        Long studentsCount = ioManager.inputLong("Введите количество студентов:");
         Integer shouldBeExpelled  = IoManager.inputInt("Введите количество отчисляемых:");
         Integer transferredStudents = IoManager.inputInt("Введите количество переведенных:");
         Semester semesterEnum = parseSemesterEnum();
