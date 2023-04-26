@@ -2,6 +2,9 @@ package commands;
 
 import managers.CollectionManager;
 import managers.IoManager;
+import things.StudyGroup;
+
+import java.util.Iterator;
 
 public class CountGreaterThanTransferredStudentsCommand implements CommandInterface {
     private final CollectionManager collectionManager;
@@ -23,8 +26,21 @@ public class CountGreaterThanTransferredStudentsCommand implements CommandInterf
 
     @Override
     public void execute(String[] args) {
-        int transferredStudents = IoManager.inputInt("Введите значение поля transferredStudents:");
-        System.out.println("Количество элементов, значение поля transferredStudents которых больше " + transferredStudents + ": " + collectionManager.countGreaterThanTransferredStudents(transferredStudents));
+        IoManager ioManager = new IoManager();
+        int transferredStudents = ioManager.inputInt();
+        int count = 0;
+        Iterator<StudyGroup> iter = collectionManager.getIterator();
+        if (collectionManager.getSize() > 0){
+            while (iter.hasNext()){
+                if (iter.next().getTransferredStudents() > transferredStudents){
+                    count += 1;
+                }
+            } if (count == 0){
+                System.out.println("Error: elements with this field doesn't exist");
+            } else {
+                System.out.println("There is elements with count of tranf greater than input is: " + count);
+            }
+        }
     }
 
 

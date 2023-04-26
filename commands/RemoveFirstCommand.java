@@ -3,7 +3,7 @@ package commands;
 
 import managers.CollectionManager;
 
-public class RemoveFirstCommand implements Command {
+public class RemoveFirstCommand implements CommandInterface{
     private final CollectionManager collectionManager;
 
     public RemoveFirstCommand(CollectionManager collectionManager) {
@@ -11,9 +11,19 @@ public class RemoveFirstCommand implements Command {
     }
 
     @Override
-    public void execute() {
-        if (collectionManager.size() > 0) {
-            collectionManager.removeFirst();
+    public String getDescription() {
+        return "remove first element of collection";
+    }
+
+    @Override
+    public String getName() {
+        return "remove_first";
+    }
+
+    @Override
+    public void execute(String[] args) {
+        if (collectionManager.getSize() > 0) {
+            collectionManager.removeByIndex(0);
             System.out.println("Первый элемент удален.");
         } else {
             System.out.println("Коллекция пуста.");

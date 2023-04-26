@@ -1,5 +1,8 @@
 package commands;
 
+import exceptions.NotEnoughArgs;
+import exceptions.WrongArgument;
+
 import java.io.IOException;
 
 /**
@@ -10,5 +13,5 @@ import java.io.IOException;
 public interface CommandInterface {
     public String getDescription();
     public String getName();
-    public void execute(String[] args) throws IOException;
+    public void execute(String[] args) throws IOException, NotEnoughArgs, WrongArgument;
 }

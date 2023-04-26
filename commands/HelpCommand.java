@@ -1,38 +1,34 @@
 package commands;
 
 
+import java.util.HashMap;
 
 /**
- * Class that displays the help
+ * Help command. Prints info about all available commands.
+ * This command uses HashMap with all commands in program to get its names and descriptions.
  */
+public class HelpCommand implements CommandInterface{
 
-public class HelpCommand extends AbstractCommand{
-    public HelpCommand(){
-        super("help", "display help");
+    private final HashMap<String, CommandInterface> commands;
+
+    public HelpCommand(HashMap<String, CommandInterface> commands) {
+        this.commands = commands;
     }
 
     @Override
-    public boolean execute(String argument) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-    
-
-}
-
-
-```
-public class HelpCommand implements Command {
-    private final CommandManager commandManager;
-
-    public HelpCommand(CommandManager commandManager) {
-        this.commandManager = commandManager;
+    public void execute(String[] args) {
+        for(String command : this.commands.keySet()){
+            System.out.printf("%-35s - %s\n", command, this.commands.get(command).getDescription());
+        }
     }
 
     @Override
-    public void execute() {
-        commandManager.getCommands().forEach((name, command) -> System.out.println(name));
+    public String getDescription() {
+        return "shows all available commands (this command)";
+    }
+
+    @Override
+    public String getName() {
+        return "Help";
     }
 }
-
-```

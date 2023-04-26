@@ -1,35 +1,34 @@
 package commands;
 
 import managers.CollectionManager;
-import managers.StudyGroupParser;
+import managers.IoManager;
 import things.StudyGroup;
 
 import java.io.IOException;
 
 public class RemoveGreaterCommand implements CommandInterface {
     private final CollectionManager collectionManager;
-    private final StudyGroupParser studyGroupParser;
-
-    public RemoveGreaterCommand(CollectionManager collectionManager, StudyGroupParser studyGroupParser) {
+    private final IoManager ioManager = new IoManager();
+    public RemoveGreaterCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
-        this.studyGroupParser = studyGroupParser;
+
     }
 
     @Override
     public void execute(String[] args) throws IOException {
-        StudyGroup studyGroup = studyGroupParser.parseStudyGroup();
-        collectionManager.removeGreater(studyGroup);
+        StudyGroup groupToCompare = ioManager.requestStudyGroup();
+        collectionManager.removeGreater(groupToCompare);
         System.out.println("Элементы удалены.");
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return "remove all elements greater than input";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "remove_greater";
     }
 
 }

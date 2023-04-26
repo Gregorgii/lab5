@@ -107,13 +107,8 @@ public class StudyGroup implements Comparable<StudyGroup> {
     }
 
 
-
     @Override
-    public int compare(StudyGroup o1, StudyGroup o2) {
+    public int compareTo(StudyGroup o) {
         return 0;
-    }
-
-    public boolean compareTo(StudyGroup groupToCompare) {
-
     }
 }
