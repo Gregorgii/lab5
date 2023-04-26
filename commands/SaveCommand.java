@@ -1,9 +1,13 @@
 package commands;
 
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import exceptions.WrongArgument;
 import managers.CollectionManager;
 import managers.FileManager;
+import things.StudyGroup;
 
 import javax.naming.NoPermissionException;
 import java.io.BufferedWriter;
@@ -16,26 +20,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SaveCommand implements CommandInterface {
-    private final FileManager fileManager;
     private final CollectionManager collectionManager;
 
-    public SaveCommand(FileManager fileManager, CollectionManager collectionManager) {
-        this.fileManager = fileManager;
+    public SaveCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return "save collection to the file";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Save";
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws WrongArgument {
         Path path = collectionManager.getPath();;
         try{
             if(args.length > 1) path = Paths.get(args[1]); // if path passed as argument
@@ -47,7 +49,7 @@ public class SaveCommand implements CommandInterface {
             if (!Files.isWritable(path)) throw new NoPermissionException("Cannot write to file.");
 
             Writer writer = new BufferedWriter(new FileWriter(path.toFile()));
-            StatefulBeanToCsv<Dragon> beanToCsv = new StatefulBeanToCsvBuilder<Dragon>(writer).build();
+            StatefulBeanToCsv<StudyGroup> beanToCsv = new StatefulBeanToCsvBuilder<StudyGroup>(writer).build();
             beanToCsv.write(collectionManager.getStream());
             writer.close();
             System.out.println("Collection saved to file " + path + " successfully");
@@ -63,6 +65,5 @@ public class SaveCommand implements CommandInterface {
         }
     }
 
-}
 }
 

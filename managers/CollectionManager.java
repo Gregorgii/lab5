@@ -1,20 +1,27 @@
 package managers;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
+
 import things.*;
 
 public class CollectionManager {
     private final ArrayList<StudyGroup> groupCollection;
     private final Path defaultPath;
+    private final ZonedDateTime creationDate;
 
     public CollectionManager(Path filePath) throws IOException {
 
         defaultPath = filePath;
         groupCollection = new ArrayList<>();
-        loadCollection();
+        this.creationDate = ZonedDateTime.now();
+        loadCollection(defaultPath);
     }
     /**
      * @return The collection itself.
@@ -31,40 +38,25 @@ public class CollectionManager {
         return defaultPath;
     }
 
-    /**
-     * @return Size of the collection.
-     */
-    public int collectionSize() {
-        return groupCollection.size();
+
+    public String getInfo() {
+        String result = "";
+        result += "Information about collection:\n";
+        result += "Created at " + this.creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + '\n';
+        result += "Collection type is " + this.groupCollection.getClass().getName() + '\n';
+        result += "Amount of items stored in - " + this.groupCollection.size() + '\n';
+        return result;
     }
 
-    /**
-     * @return The first element of the collection or null if collection is empty.
-     */
-    public StudyGroup getFirst() {
-        if (groupCollection.isEmpty()) return null;
-        return groupCollection.get(0);
+    public Iterator<StudyGroup> getIterator(){
+        return groupCollection.iterator();
     }
 
-    /**
-     * @return The last element of the collection or null if collection is empty.
-     */
-    public StudyGroup getLast() {
-        if (groupCollection.isEmpty()) return null;
-        return groupCollection.get(groupCollection.size()-1);
-    }
 
-    /**
-     * Get element with min. value
-     * @return dragon object with min. value
-     */
-    public StudyGroup getMin(){
-        if(groupCollection.size() > 0) return Collections.min(groupCollection);
-        return null;
-    }
 
     /**
      * Get collection size
+     *
      * @return number of elements stored in collection
      */
     public int getSize(){
@@ -91,11 +83,37 @@ public class CollectionManager {
     }
 
     /**
-     * Removes a group from collection.
-     * @param id A group to remove.
+     * Removes object from collection with specified id.
+     * @param id id of object to be removed from collection.
+     * @return true if object was removed successfully, false if object with spec. id does now exist.
      */
-    public void removeByID(Integer id) {
-        groupCollection.removeIf(groupCollection -> Objects.equals(groupCollection.getId(), id));
+    public boolean removeByID(int id){
+        for(int index = 0; index < groupCollection.size(); index++){
+            if(groupCollection.get(index).getId() == id){
+                this.removeByIndex(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get element with min. value
+     * @return dragon object with min. value
+     */
+    public StudyGroup getMax(){
+        if(groupCollection.size() > 0) return Collections.max(groupCollection);
+        return null;
+    }
+
+
+    /**
+     * Removes element with specified index
+     * @param index object to be removed index
+     * @throws IndexOutOfBoundsException when elements with such index does not exist
+     */
+    public void removeByIndex(int index) throws IndexOutOfBoundsException{
+        groupCollection.remove(index);
     }
 
     /**
@@ -103,13 +121,10 @@ public class CollectionManager {
      * @param groupToCompare A group to compare with.
      */
     public void removeGreater(StudyGroup groupToCompare) throws IOException {
-
-
-        StudyGroup studyGroup = new StudyGroupParser(new IoManager()).parseStudyGroup();
         int counter = 0;
 
         for (StudyGroup group : groupCollection){
-            if(group.compareTo(groupToCompare)) {
+            if(group.compareTo(groupToCompare) > 0) {
                 removeByID(group.getId());
                 counter += 1;
             }
@@ -117,37 +132,31 @@ public class CollectionManager {
         System.out.println(counter + " elements was removed");
     }
 
+
     /**
-     * Clears the collection.
+     * Get stream
+     * @return stream
      */
-    public void clearCollection() {
-        groupCollection.clear();
+    public Stream<StudyGroup> getStream(){
+        return groupCollection.stream();
     }
 
     /**
      * Generates next ID. It will be (the bigger one + 1).
      * @return Next ID.
      */
-    public Long generateNextId() {
-        if (groupCollection.isEmpty()) return 1L;
-        return (long) (groupCollection.get(groupCollection.size() - 1).getId() + 1);
+    public Integer generateNextId() {
+        if (groupCollection.isEmpty()) return 1;
+        return (int) (groupCollection.get(groupCollection.size() - 1).getId() + 1);
     }
 
-    /**
-     * Saves the collection to file.
-     * @throws IOException
-     */
-    public void saveCollection() throws IOException {
-        Object fileName = IoManager.inputString(IoManager.inputString("write name of file"));
-        writeCollection(groupCollection, fileName);
-    }
 
     /**
      * Loads the collection from file.
-     * @throws IOException
      */
-    private void loadCollection() throws IOException {
-       groupCollection = fileManager.readCollection(null);
+    private void loadCollection(Path defaultPath) {
+        FileManager fileManager = new FileManager(defaultPath);
+        fileManager.fillCollectionFromFile(defaultPath);
     }
 
     @Override
@@ -161,12 +170,9 @@ public class CollectionManager {
         }
         return info.toString();
     }
-    public Object infoAboutCollection() {
-        return null;
-    }
 
-    public boolean isMax(StudyGroup studyGroup) {
-    }
+
+
 }
 
 

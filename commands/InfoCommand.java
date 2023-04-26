@@ -1,33 +1,8 @@
 package commands;
 
-import java.io.Console;
-
-import exceptions.WrongAmountOfElementsException;
 import managers.CollectionManager;
 
-public class InfoCommand extends AbstractCommand {
-    private final CollectionManager collectionManager;
-
-    public InfoCommand(CollectionManager collectionManager) {
-        super("info", "print information about the collection to the standard output stream (type, initialization date, number of elements, etc.)");
-        this.collectionManager = collectionManager;
-    }
-
-    @Override
-    public boolean execute(String argument) {
-        try{
-            if(!argument.isEmpty()) throw new WrongAmountOfElementsException();
-            Console.printLn(collectionManager.infoAboutCollection());
-            return true;
-        } catch (WrongAmountOfElementsException e){
-            Console.printError("Usage of (" + argument + ") in " + getName());
-        }
-        return false;
-    }
-}
-
-
-public class InfoCommand implements Command {
+public class InfoCommand implements CommandInterface {
     private final CollectionManager collectionManager;
 
     public InfoCommand(CollectionManager collectionManager) {
@@ -35,9 +10,18 @@ public class InfoCommand implements Command {
     }
 
     @Override
-    public void execute() {
-        System.out.println("Тип коллекции: " + collectionManager.collectionType());
-        System.out.println("Дата инициализации: " + collectionManager.initializationDate());
-        System.out.println("Количество элементов: " + collectionManager.size());
+    public void execute(String[] args) {
+        System.out.println(collectionManager.getInfo());
     }
+
+    @Override
+    public String getDescription() {
+        return "standard stream with info about collection";
+    }
+
+    @Override
+    public String getName() {
+        return "Info";
+    }
+
 }

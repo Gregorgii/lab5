@@ -1,20 +1,49 @@
 package commands;
 
-public class RemoveByIdCommand implements Command {
+import exceptions.NotEnoughArgs;
+import exceptions.WrongArgument;
+import managers.CollectionManager;
+import managers.IoManager;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+public class RemoveByIdCommand implements CommandInterface {
     private final CollectionManager collectionManager;
 
     public RemoveByIdCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
+    @Override
+    public String getDescription() {
+        return " remove element by his id ";
+    }
 
     @Override
-    public void execute() {
-        int id = IoManager.inputInt("Введите id элемента для удаления:");
-        if (collectionManager.isIdTaken(id)) {
-            collectionManager.removeFromCollection(id);
-            System.out.println("Элемент удален.");
-        } else {
-            System.out.println("Элемент с таким id не найден.");
-        }
+    public String getName() {
+        return "remove_by_id";
     }
+
+
+    /**
+     * Removes object from collection with specified id.
+     * @param args of object to be removed from collection.
+     */
+    @Override
+    public void execute(String[] args) throws IOException, NotEnoughArgs, WrongArgument {
+        if(args.length < 2) throw new NotEnoughArgs("Command requires \"id\" argument");
+        int id;
+        try{
+            id = Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e){
+            throw  new WrongArgument("Argument must be long integer number");
+        }
+        boolean result = collectionManager.removeByID(id);
+        if(result) System.out.println("Object removed successfully");
+        else System.out.println("No such element");
+    }
+
+
 }
+

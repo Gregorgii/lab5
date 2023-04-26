@@ -1,43 +1,48 @@
 package commands;
 
+import exceptions.NotEnoughArgs;
+import exceptions.WrongArgument;
 import managers.CollectionManager;
 import managers.IoManager;
-import managers.StudyGroupParser;
+import things.StudyGroup;
 
-public class UpdateCommand extends AbstractCommand {
+import java.io.IOException;
+
+public class UpdateCommand implements CommandInterface {
     private final CollectionManager collectionManager;
-    private final StudyGroupParser studyGroupParser;
+    private final IoManager ioManager;
 
-    public UpdateCommand(CollectionManager collectionManager, StudyGroupParser studyGroupParser) {
+    public UpdateCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
-        this.studyGroupParser = studyGroupParser;
+        this.ioManager = new IoManager();
     }
 
-    @Override
-    public void execute() {
-        int id = IoManager.inputInt("Введите id элемента, который нужно обновить:");
-        if (collectionManager.isIdTaken(id)) {
-            collectionManager.updateCollection(id, studyGroupParser.parseStudyGroup());
-        } else {
-            System.out.println("Элемент с таким id не найден.");
-        }
-    }
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDescription'");
+        return "обновить значение элемента коллекции, id которого равен заданному";
     }
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return "Update";
     }
 
     @Override
-    public boolean execute(String argument) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    public void execute(String[] args) throws IOException, NotEnoughArgs, WrongArgument {
+        if(args.length < 2) throw new NotEnoughArgs("Command requires \"id\" argument");
+        int id;
+        try{
+            id = Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e){
+            throw  new WrongArgument("Argument must be long integer number.");
+        }
+
+        StudyGroup studyGroup = collectionManager.getById(id); // get object to update
+        if(studyGroup == null) throw new WrongArgument("No such element.");
+
+        studyGroup = ioManager.requestStudyGroup();
     }
+
 }

@@ -1,17 +1,15 @@
 package commands;
 
 import managers.CollectionManager;
-import managers.StudyGroupParser;
+import managers.IoManager;
 
 
 public class AddCommand implements CommandInterface {
     private final CollectionManager collectionManager;
-    private final StudyGroupParser studyGroupParser;
 
-    public AddCommand(CollectionManager collectionManager, StudyGroupParser studyGroupParser) {
-        super();
+
+    public AddCommand(CollectionManager collectionManager, IoManager ioManger) {
         this.collectionManager = collectionManager;
-        this.studyGroupParser = studyGroupParser;
     }
 
     @Override
@@ -26,7 +24,8 @@ public class AddCommand implements CommandInterface {
 
     @Override
     public void execute(String[] args) {
-        collectionManager.addToCollection(studyGroupParser.parseStudyGroup());
+        IoManager ioManager = new IoManager();
+        collectionManager.addToCollection(ioManager.requestStudyGroup());
     }
 
 }

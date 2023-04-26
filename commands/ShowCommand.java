@@ -1,51 +1,44 @@
 package commands;
 
-import java.io.Console;
-import java.util.ArrayList;
+import java.util.Iterator;
 
-import collection.Organize;
-import exceptions.WrongAmountOfElementsException;
 import managers.CollectionManager;
+import things.StudyGroup;
 
-public class ShowCommand extends AbstractCommand {
+public class ShowCommand implements CommandInterface{
     private final CollectionManager collectionManager;
+
     public ShowCommand(CollectionManager collectionManager) {
-        super("show", "print to standard output all elements of the collection in string representation");
         this.collectionManager = collectionManager;
     }
 
-    /**
-     * Prints all the organizations in the collection
-     * 
-     * @param argument The argument passed to the command.
-     * @return the response of right execution.
-     */
+
+
+
     @Override
-    public boolean execute(String argument) {
-        try {
-            if (!argument.isEmpty()) throw new WrongAmountOfElementsException();
-            ArrayList<Organize> copyOfCollection = new ArrayList<>(collectionManager.getCollection());
-            for (Organize organization : copyOfCollection) {
-                Console.printLn(organization.toString() + "\n============");
-            }
-            return true;
-        } catch (WrongAmountOfElementsException e){
-            Console.printError("No arguments in " + getName());
+    public String getDescription() {
+        return "stream with all elements of collection";
+    }
+
+    @Override
+    public String getName() {
+        return "Show";
+    }
+
+    @Override
+    public void execute(String[] args) {
+        Iterator<StudyGroup> iter = collectionManager.getIterator();
+        if(!iter.hasNext()){
+            System.out.println("Collection is empty");
+            return;
         }
-        return false;
-    }
-}
+        while (iter.hasNext()){
+            StudyGroup studyGroup = iter.next();
+            System.out.println();
+            System.out.println(studyGroup.getName());
+            System.out.println(studyGroup);
+        }
+        System.out.println("that's all groups");
 
-
-public class ShowCommand implements Command {
-    private final CollectionManager collectionManager;
-
-    public ShowCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
-    }
-
-    @Override
-    public void execute() {
-        collectionManager.collectionElements().forEach(System.out::println);
     }
 }

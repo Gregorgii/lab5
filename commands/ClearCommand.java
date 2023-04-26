@@ -1,6 +1,7 @@
 package commands;
 
 import managers.CollectionManager;
+import managers.FileManager;
 
 public class ClearCommand implements CommandInterface {
     private final CollectionManager collectionManager;
@@ -21,7 +22,7 @@ public class ClearCommand implements CommandInterface {
 
     @Override
     public void execute(String[] args) {
-        collectionManager.clearCollection();
+        collectionManager.getCollection().clear();
         System.out.println("Коллекция очищена.");
     }
 
