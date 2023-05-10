@@ -16,7 +16,7 @@ public class RemoveGreaterCommand implements CommandInterface {
 
     @Override
     public void execute(String[] args) throws IOException {
-        StudyGroup groupToCompare = ioManager.requestStudyGroup();
+        StudyGroup groupToCompare = ioManager.requestStudyGroup(collectionManager);
         collectionManager.removeGreater(groupToCompare);
         System.out.println("Элементы удалены.");
     }

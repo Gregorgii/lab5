@@ -4,10 +4,12 @@ package commands;
 import exceptions.NotEnoughArgs;
 import exceptions.WrongArgument;
 import managers.CollectionManager;
-import managers.IoManager;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,21 +20,17 @@ import java.util.regex.Pattern;
 public class Executor {
 
     private final HashMap<String, CommandInterface> commands;
-    private final IoManager ioManager;
-    private final CollectionManager collectionManager;
 
     /**
      * Constructor for command executor.
      *
      * @param collectionManager collection manager class object
      */
-    public Executor(CollectionManager collectionManager, IoManager ioManager){
-        this.ioManager = ioManager;
-        this.collectionManager = collectionManager;
+    public Executor(CollectionManager collectionManager){
         this.commands = new HashMap<>();
 
-        commands.put("add", new AddCommand(collectionManager, ioManager));
-        commands.put("add_if_max", new AddIfMaxCommand(collectionManager, ioManager));
+        commands.put("add", new AddCommand(collectionManager));
+        commands.put("add_if_max", new AddIfMaxCommand(collectionManager));
         commands.put("show", new ShowCommand(collectionManager));
         commands.put("clear", new ClearCommand(collectionManager));
         commands.put("exit", new ExitCommand());
@@ -46,6 +44,7 @@ public class Executor {
         commands.put("count_greater_than_transferred_students", new CountGreaterThanTransferredStudentsCommand(collectionManager));
         commands.put("print_field_descending_semester_enum", new PrintFieldDescendingSemesterEnumCommand(collectionManager));
         commands.put("execute_script", new ExecuteScriptCommand(this));
+        commands.put("help", new HelpCommand(this.commands));
 
 
 

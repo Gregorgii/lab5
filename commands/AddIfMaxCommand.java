@@ -6,11 +6,10 @@ import things.StudyGroup;
 
 public class AddIfMaxCommand implements CommandInterface {
     private final CollectionManager collectionManager;
-    private final IoManager ioManager;
 
-    public AddIfMaxCommand(CollectionManager collectionManager, IoManager ioManager) {
+
+    public AddIfMaxCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
-        this.ioManager = ioManager;
     }
 
     @Override
@@ -25,7 +24,8 @@ public class AddIfMaxCommand implements CommandInterface {
 
     @Override
     public void execute(String[] args) {
-        StudyGroup group = ioManager.requestStudyGroup();
+        IoManager ioManager = new IoManager();
+        StudyGroup group = ioManager.requestStudyGroup(collectionManager);
         if(collectionManager.getSize() == 0) this.collectionManager.addToCollection(group);
         else if (group.compareTo(collectionManager.getMax()) > 0){
             this.collectionManager.addToCollection(group);

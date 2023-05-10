@@ -6,7 +6,6 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import exceptions.WrongArgument;
 import managers.CollectionManager;
-import managers.FileManager;
 import things.StudyGroup;
 
 import javax.naming.NoPermissionException;

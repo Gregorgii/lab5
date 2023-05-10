@@ -1,21 +1,37 @@
 package things;
 
-import java.time.LocalDate;
-import java.util.Comparator;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import com.opencsv.bean.CsvRecurse;
+import managers.DateConverter;
+
+import java.time.ZonedDateTime;
+
 
 /**
 * The hugest class that include all info about students and calls Study group
 */
 
 public class StudyGroup implements Comparable<StudyGroup> {
-    private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+
+    @CsvBindByName(column = "IDOFGROUP", required = true)
+    private Integer id;//Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    @CsvBindByName(column = "NAMEOFGROUP", required = true)
     private String name; //Поле не может быть null, Строка не может быть пустой
+    @CsvRecurse
     private Coordinates coordinates; //Поле не может быть null
-    private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    @CsvCustomBindByName(column = "CREATIONDATE", required = true, converter = DateConverter.class)
+    private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+
+    @CsvBindByName(column = "STUDENTSCOUNT", required = true)
     private long studentsCount; //Значение поля должно быть больше 0
+    @CsvBindByName(column = "SHOULDBEEXPELLED", required = true)
     private Integer shouldBeExpelled; //Значение поля должно быть больше 0, Поле может быть null
+    @CsvBindByName(column = "TRANSFERREDSTUDENTS", required = true)
     private Integer transferredStudents; //Значение поля должно быть больше 0, Поле может быть null
+    @CsvBindByName(column = "SEMESTER", required = false)
     private Semester semesterEnum; //Поле не может быть null
+    @CsvRecurse
     private Person groupAdmin; //Поле не может быть null
 
     /**
@@ -29,7 +45,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
      * @param semesterEnum
      * @param groupAdmin
      */
-    public StudyGroup(Integer id, String name, Coordinates coordinates, java.time.LocalDate creationDate, Long studentsCount, Integer shouldBeExpelled, Integer transferredStudents, Semester semesterEnum, Person groupAdmin){
+    public StudyGroup(Integer id, String name, Coordinates coordinates, ZonedDateTime creationDate, Long studentsCount, Integer shouldBeExpelled, Integer transferredStudents, Semester semesterEnum, Person groupAdmin){
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -39,6 +55,9 @@ public class StudyGroup implements Comparable<StudyGroup> {
         this.transferredStudents = transferredStudents;
         this.semesterEnum = semesterEnum;
         this.groupAdmin = groupAdmin;
+    }
+
+    public StudyGroup(){
     }
 
     /**
@@ -65,7 +84,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
     * @return The info about Study Group (creation date)
     */
 
-    public LocalDate getCreationDate(){
+    public ZonedDateTime getCreationDate(){
         return creationDate;
     }
 

@@ -8,7 +8,7 @@ public class AddCommand implements CommandInterface {
     private final CollectionManager collectionManager;
 
 
-    public AddCommand(CollectionManager collectionManager, IoManager ioManger) {
+    public AddCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
 
@@ -25,7 +25,7 @@ public class AddCommand implements CommandInterface {
     @Override
     public void execute(String[] args) {
         IoManager ioManager = new IoManager();
-        collectionManager.addToCollection(ioManager.requestStudyGroup());
+        collectionManager.addToCollection(ioManager.requestStudyGroup(collectionManager));
     }
 
 }

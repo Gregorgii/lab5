@@ -42,7 +42,7 @@ public class UpdateCommand implements CommandInterface {
         StudyGroup studyGroup = collectionManager.getById(id); // get object to update
         if(studyGroup == null) throw new WrongArgument("No such element.");
 
-        studyGroup = ioManager.requestStudyGroup();
+        studyGroup = ioManager.requestStudyGroup(collectionManager);
     }
 
 }

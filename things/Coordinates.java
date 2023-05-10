@@ -1,12 +1,15 @@
 package things;
 
+import com.opencsv.bean.CsvBindByName;
 import exceptions.WrongField;
 
 /**
 * Class that work w coordinates
 */
 public class Coordinates {
-    private Double x; //Значение поля должно быть больше -597, Поле не может быть null
+    @CsvBindByName(column = "COORDINATESX", required = true)
+    private Double x; //Значение поля должно быть больше -771, Поле не может быть null
+    @CsvBindByName(column = "COORDINATESY", required = true)
     private Float y; //Поле не может быть null
 
     public Coordinates(){
@@ -30,7 +33,7 @@ public class Coordinates {
     /**
      * Set X coordinate. Value can't be null.
      * @param x coordinate X to set.
-     * @throws WrongField when value is null or value greater than 710.
+     * @throws WrongField when value is null or value less than -771.
      */
     public void setX(Double x) throws WrongField {
         if(x == null) throw new WrongField("X can not be null");

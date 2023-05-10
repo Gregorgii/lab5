@@ -1,16 +1,25 @@
 package things;
 
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import com.opencsv.bean.CsvDate;
 import exceptions.WrongField;
 
 import java.time.LocalDate;
+
 /**
 * The class Person th work w persons
 */
 
 public class Person {
+    @CsvBindByName(column = "NAME", required = true)
     private String name; //Поле не может быть null, Строка не может быть пустой
+    @CsvBindByName(column = "BIRTHDAY", required = true)
+    @CsvDate("yyyy-MM-dd")
     private java.time.LocalDate birthday; //Поле не может быть null
+    @CsvBindByName(column = "WEIGHT", required = true)
     private long weight; //Значение поля должно быть больше 0
+    @CsvBindByName(column = "PASSPORTID", required = true)
     private String passportID; //Строка не может быть пустой, Поле не может быть null
 
     /**
@@ -28,6 +37,10 @@ public class Person {
     /**
      * @return The persons name
      */
+
+    public Person(){
+
+    }
 
     public String getName(){
         return name;

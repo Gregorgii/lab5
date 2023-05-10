@@ -7,9 +7,10 @@ import things.Semester;
 import things.StudyGroup;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
 public class IoManager {
     /**
@@ -114,12 +115,12 @@ public class IoManager {
     }
 
 
-    public StudyGroup requestStudyGroup() {
-        Integer id = 1;
+    public StudyGroup requestStudyGroup(CollectionManager collectionManager) {
+        Integer id = collectionManager.generateNextId();
         System.out.println("Введите название группы");
         String name = inputString();
         Coordinates coordinates = requestCoordinates();
-        LocalDate creationDate = LocalDate.now();
+        ZonedDateTime creationDate = ZonedDateTime.now();
         System.out.println("Введите количество студентов");
         Long studentsCount = inputLong();
         System.out.println("Введите количество отчисляемых");
@@ -133,19 +134,25 @@ public class IoManager {
         return new StudyGroup(id, name, coordinates, creationDate, studentsCount, shouldBeExpelled, transferredStudents, semesterEnum, groupAdmin);
     }
 
-    public Semester requestSemester(){
-        for(Semester semester : Semester.values()){
+    public Semester requestSemester() {
+        Semester outSemester;
+        for (Semester semester : Semester.values()) {
             System.out.println(semester);
         }
         System.out.println();
-        String option = this.inputString().strip();
-        try {
-            if (option.length() == 0) return null;
-            return Semester.valueOf(option.toUpperCase());
-        } catch (IllegalArgumentException e){
-            System.out.println("Выберите один из выведенных семестров");
+        while (true) {
+            try {
+                String option = this.inputString().strip();
+                outSemester = Semester.valueOf(option.toUpperCase());
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Выберите один из выведенных семестров");
+            } catch (NullPointerException e) {
+                outSemester = null;
+                break;
+            }
         }
-        return null;
+        return outSemester;
     }
 
 
@@ -166,7 +173,8 @@ public class IoManager {
         LocalDate date = null;
         while (date == null) {
             try {
-                date = LocalDate.parse(inputString());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                date = LocalDate.parse(inputString(), formatter);
             } catch (Exception e) {
                 System.out.println("Неверный формат даты. Попробуйте еще раз.");
             }

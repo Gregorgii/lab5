@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: Main
+Class-Path: opencsv-5.7.1.jar commons-collections4-4.4.jar commons-loggi
+ ng-1.2.jar commons-text-1.10.0.jar commons-lang3-3.12.0.jar commons-bea
+ nutils-1.9.4.jar
+

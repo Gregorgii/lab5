@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="s368462@se.ifmo.ru:2222" type="ssh/sftp" uuid="abce6d88-ebb8-4cae-8106-5314fcc6e0d9">
+        <config>
+          <option name="projectRootOnTarget" value="/home/studs/s368462/Lab5" />
+          <option name="serverName" value="s368462@se.ifmo.ru:2222 password" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="javaVersionString" value="17.0.2" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
